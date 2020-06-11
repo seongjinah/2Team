@@ -1,0 +1,69 @@
+import requests
+from bs4 import BeautifulSoup
+import time
+
+start=time.time() #시작시간 저장
+
+#크롤링
+address = input("주소를 입력해주세요")
+res = requests.get(address)
+soup = BeautifulSoup(res.content, 'html.parser')
+
+#단어 뽑기
+p = soup.find_all('p')
+h1 = soup.find_all('h1')
+h2 = soup.find_all('h2')
+h3 = soup.find_all('h3')
+h4 = soup.find_all('h4')
+h5 = soup.find_all('h5')
+h6 = soup.find_all('h6')
+list = soup.find_all('li')
+
+text = []
+s=''
+
+for i in p:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h1:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h2:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h3:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h4:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h5:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in h6:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+for i in list:
+    s += i.text + ' '
+    text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+#단어수 계산 & 단어 빈도수 계산
+num = 0
+D = {}
+for word in text:
+    n = text.count(word)
+    num += n
+    D1 = {word: n}
+    D.update(D1)
+
+D_ = sorted(D.items(), reverse=True, key=lambda item: item[1]) #단어빈도수 기준 오름차순 정렬
+
+print("text number: ", num) #전체 단어수
+print("time : ", time.time()-start) #걸린 시간
