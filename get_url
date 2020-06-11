@@ -1,0 +1,23 @@
+from flask import Flask
+from flask import render_template
+from flask import request
+
+app = Flask(__name__)
+
+@app.route('/')
+def start():
+	return render_template('2Team.html')
+
+@app.route('/one_url', methods=['GET', 'POST'])
+def one_url():
+	error = None
+	if request.method == 'POST':
+		address = request.form['onename']
+		return render_template('2Team.html', value = address)
+
+@app.route('/textfile', methods=['GET', 'POST'])
+def textfile():
+	error = None
+	if request.method == 'POST':
+		filename = request.form['morename']
+		return render_template('2Team.html', filename = filename)
