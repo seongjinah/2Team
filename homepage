@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<h1>URL Analysis Service</h1>
-		<fieldset style="width:400px;height:150px;">
+		<fieldset style="width:500px;height:150px;">
 			<legend style="font-size:150%">One URL</legend>
 			<form method="POST" action="/one_url">
 			<input name="onename" type="text" placeholder="Please input one url!" style="width:500px;height:40px;font-size:120%"><br><br>
@@ -16,16 +16,16 @@
 			</form>	
 		</fieldset>
 		<br>
-		<fieldset style="width:400px;height:150px;">
+		<fieldset style="width:500px;height:140px;">
 			<legend style="font-size:150%">URL Text File</legend>
 			<form method="POST" action="/textfile">
-			<input name="morename" type="text" placeholder="Please input textfile name!" style="width:500px;height:40px;font-size:120%"><br><br>
+			<input type="file" name="FileName" accept=".txt" style="width:500px;height:40px>
+			<div style="height:20px"></div>
+			<div style="height:40px">
+			<br>
 			<input type="submit" name="enter2" value="Enter" style="width:90px;height:40px;float:right;border-radius:10px;font-size:120%">
+			</div>
 			</form>
 		</fieldset>
-		<br><br>
-		<h3> address: {{value}} </h3>
-		<br>
-		<h3> textfile: {{filename}} </h3>
 	</body>
 </html>
