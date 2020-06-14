@@ -1,5 +1,3 @@
-from flask import Flask
-from flask import render_template
 from flask import request
 
 app = Flask(__name__)
@@ -19,5 +17,11 @@ def one_url():
 def textfile():
 	error = None
 	if request.method == 'POST':
-		filename = request.form['morename']
-		return render_template('2Team.html', filename = filename)
+		filename = request.form['FileName']
+		f = open(filename, 'r')
+		lines = f.readlines()
+		n = len(lines)
+		web_list = ''
+		for i in lines:
+			web_list += i[:-1] + ','
+		return render_template('moreurl.html', filename = filename, url_list = web_list, size = n)
