@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<html>
+	<head>
+		<script>
+			var jbString = '{{ url_list }}';
+			var array=jbString.split(",");
+			var size='{{ size }}';
+			size = Number(size);
+		</script>
+		<title>2Team_OpenSource_TemaProject_textfile</title>
+		<style>
+			h1 { text-align: center; }
+		</style>
+	</head>
+	<body>
+		<h1>URL Analysis Service</h1>
+		<h3>text file: {{ filename }} </h3>
+		<br>
+		<script>
+			for(var i=0;i<size;i++){
+				document.write(array[i]);
+				document.write("<br>");
+			}
+		</script>
+	</body>
+</html>
