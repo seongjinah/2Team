@@ -1,4 +1,9 @@
+from flask import Flask
+from flask import render_template
 from flask import request
+from bs4 import BeautifulSoup
+import requests
+import time
 
 app = Flask(__name__)
 
@@ -20,8 +25,76 @@ def textfile():
 		filename = request.form['FileName']
 		f = open(filename, 'r')
 		lines = f.readlines()
-		n = len(lines)
+		size = len(lines)
 		web_list = ''
+		time_list = ''
+		num_list = ''
+		content_list = ''
 		for i in lines:
-			web_list += i[:-1] + ','
-		return render_template('moreurl.html', filename = filename, url_list = web_list, size = n)
+			start=time.time()
+
+			address = i[:-1]
+			res=requests.get(address)
+			soup = BeautifulSoup(res.content, 'html.parser')
+
+			p=soup.find_all('p')
+			h1=soup.find_all('h1')
+			h2=soup.find_all('h2')
+			h3=soup.find_all('h3')
+			h4=soup.find_all('h4')
+			h5=soup.find_all('h5')
+			h6=soup.find_all('h6')
+			li=soup.find_all('li')
+
+			text = []
+			s = ''
+
+			for i in p:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h1:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h2:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h3:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h4:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h5:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h6:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in li:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			#단어수 계산 & 단어 빈도수 계산
+			num = 0
+			D = {}
+			for word in text:
+				num = num+1
+				n = text.count(word)
+				D1 = {word: n}
+				D.update(D1)
+			
+			end=time.time()
+			time_len=end-start
+			
+			web_list += address + ','
+			time_list += str(time_len) + ','
+			num_list += str(num) + ','
+			content_list += s + '+'
+		return render_template('moreurl.html', filename = filename, url_list = web_list, size = size, num = num_list, time = time_list)
