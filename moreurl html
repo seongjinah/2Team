@@ -2,8 +2,12 @@
 <html>
 	<head>
 		<script>
-			var jbString = '{{ url_list }}';
-			var array=jbString.split(",");
+			var urllist = '{{ url_list }}';
+			var url_ary=urllist.split(",");
+			var wordnum = '{{ num }}';
+			var num_ary=wordnum.split(",");
+			var time = '{{ time }}';
+			var time_ary=time.split(",");
 			var size='{{ size }}';
 			size = Number(size);
 		</script>
@@ -18,7 +22,12 @@
 		<br>
 		<script>
 			for(var i=0;i<size;i++){
-				document.write(array[i]);
+				document.write(url_ary[i]);
+				document.write("<br>");
+				document.write(num_ary[i]);
+				document.write("<br>");
+				document.write(time_ary[i]);
+				document.write("<br>");
 				document.write("<br>");
 			}
 		</script>
