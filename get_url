@@ -124,3 +124,149 @@ def cosine():
 			cosine = str(similarity_simple_pair[idx,j])
 			cosine_ary.append(cosine)
 		return render_template('cosinesimilarity.html', number = index, web = web, cosine_ary = cosine_ary)
+#!/usr/bin/python
+
+from flask import Flask
+from flask import render_template
+from flask import request
+from bs4 import BeautifulSoup
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+import requests
+import time
+
+app = Flask(__name__)
+
+@app.route('/')
+def start():
+	return render_template('2Team.html')
+
+@app.route('/one_url', methods=['GET', 'POST'])
+def one_url():
+	error = None
+	if request.method == 'POST':
+		address = request.form['onename']
+		return render_template('2Team.html', value = address)
+
+content_list = []
+web_list = []
+
+@app.route('/textfile', methods=['GET', 'POST'])
+def textfile():
+	error = None
+	if request.method == 'POST':
+		filename = request.form['FileName']
+		f = open(filename, 'r')
+		lines = f.readlines()
+		time_list = []
+		num_list = []
+		for i in lines:
+			start=time.time()
+
+			address = i[:-1]
+			res=requests.get(address)
+			soup = BeautifulSoup(res.content, 'html.parser')
+
+			p=soup.find_all('p')
+			h1=soup.find_all('h1')
+			h2=soup.find_all('h2')
+			h3=soup.find_all('h3')
+			h4=soup.find_all('h4')
+			h5=soup.find_all('h5')
+			h6=soup.find_all('h6')
+			li=soup.find_all('li')
+
+			text = []
+			s = ''
+
+			for i in p:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h1:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h2:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h3:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h4:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h5:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in h6:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			for i in li:
+				s += i.text + ' '
+				text.extend(i.text.replace('.', '').replace(',', '').replace('"', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split())
+
+			#단어수 계산 & 단어 빈도수 계산
+			num = 0
+			D = {}
+			for word in text:
+				num = num+1
+				n = text.count(word)
+				D1 = {word: n}
+				D.update(D1)
+			
+			end=time.time()
+			time_len=end-start
+			
+			web_list.append(address)
+			time_list.append(time_len)
+			num_list.append(num)
+			content_list.append(s)
+
+		return render_template('moreurl.html', filename = filename, url_list = web_list, num_list= num_list, time_list = time_list)
+
+@app.route('/cosine', methods=['GET', 'POST'])
+def cosine():
+	error = None
+	if request.method == 'POST':
+		index = request.form['url_idx']
+		idx = int(index)
+		web = web_list[idx]
+
+		tfidf_vect_simple = TfidfVectorizer()
+		feature_vect_simple = tfidf_vect_simple.fit_transform(content_list)
+
+		similarity_simple_pair = cosine_similarity(feature_vect_simple, feature_vect_simple)
+
+		cosine_ary=[]
+		web_name=[]
+		n = len(content_list)
+		for j in range(n):
+			cosine = float(similarity_simple_pair[idx,j])
+			cosine_ary.append(cosine)
+
+		ary = cosine_ary.copy()
+		ary.sort(reverse=True)
+		similar1 = ary[1]
+		similar2 = ary[2]
+		similar3 = ary[3]
+
+		for j in range(n):
+			if (similar1 == cosine_ary[j]):
+				n1 = j
+			if (similar2 == cosine_ary[j]):
+				n2 = j
+			if (similar3 == cosine_ary[j]):
+				n3 = j
+
+		web_name.append(web_list[n1])
+		web_name.append(web_list[n2])
+		web_name.append(web_list[n3])
+			
+		return render_template('cosinesimilarity.html', number = index, web = web, web_name = web_name)
