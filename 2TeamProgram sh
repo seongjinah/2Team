@@ -1,0 +1,16 @@
+#!/bin/bash
+
+pip install numpy
+pip install scipy
+pip install scikit-learn
+pip install django
+
+if [ ! -d templates ]; then
+	mkdir templates
+fi
+
+cp -f 2Team.html templates
+cp -f moreurl.html templates
+cp -f cosinesimilarity.html templates
+
+flask run
