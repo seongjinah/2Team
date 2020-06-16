@@ -1,7 +1,12 @@
+#!/usr/bin/python
+
 from flask import Flask
 from flask import render_template
 from flask import request
 from bs4 import BeautifulSoup
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 import requests
 import time
 
@@ -18,6 +23,9 @@ def one_url():
 		address = request.form['onename']
 		return render_template('2Team.html', value = address)
 
+content_list = []
+web_list = []
+
 @app.route('/textfile', methods=['GET', 'POST'])
 def textfile():
 	error = None
@@ -25,11 +33,8 @@ def textfile():
 		filename = request.form['FileName']
 		f = open(filename, 'r')
 		lines = f.readlines()
-		size = len(lines)
-		web_list = ''
-		time_list = ''
-		num_list = ''
-		content_list = ''
+		time_list = []
+		num_list = []
 		for i in lines:
 			start=time.time()
 
@@ -93,8 +98,29 @@ def textfile():
 			end=time.time()
 			time_len=end-start
 			
-			web_list += address + ','
-			time_list += str(time_len) + ','
-			num_list += str(num) + ','
-			content_list += s + '+'
-		return render_template('moreurl.html', filename = filename, url_list = web_list, size = size, num = num_list, time = time_list)
+			web_list.append(address)
+			time_list.append(time_len)
+			num_list.append(num)
+			content_list.append(s)
+
+		return render_template('moreurl.html', filename = filename, url_list = web_list, num_list= num_list, time_list = time_list)
+
+@app.route('/cosine', methods=['GET', 'POST'])
+def cosine():
+	error = None
+	if request.method == 'POST':
+		index = request.form['url_idx']
+		idx = int(index)
+		web = web_list[idx]
+
+		tfidf_vect_simple = TfidfVectorizer()
+		feature_vect_simple = tfidf_vect_simple.fit_transform(content_list)
+
+		similarity_simple_pair = cosine_similarity(feature_vect_simple, feature_vect_simple)
+
+		cosine_ary=[]
+		n = len(content_list)
+		for j in range(n):
+			cosine = str(similarity_simple_pair[idx,j])
+			cosine_ary.append(cosine)
+		return render_template('cosinesimilarity.html', number = index, web = web, cosine_ary = cosine_ary)
