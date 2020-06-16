@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<html>
+	<head>
+	</head>
+	<body>
+		<h2>{{ web }}</h2>
+		<br>
+		<h4>top 3 similar web url</h4>
+		<br>
+		{% for i in range(0,web_name|length)%}
+			<h5>{{ web_name[i] }}</h5>
+		{% endfor %}
+	</body>
+</html>
