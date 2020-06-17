@@ -1,0 +1,85 @@
+from bs4 import BeautifulSoup
+import requests
+from math import log
+
+content_list = []
+
+web_list = ['https://cassandra.apache.org/', 'http://empire-db.apache.org/', 'http://hive.apache.org/',
+            'http://hbase.apache.org/', 'https://camel.apache.org/', 'http://mesos.apache.org/',
+            'https://ignite.apache.org/']
+
+for i in web_list:
+    res = requests.get(i)
+    soup = BeautifulSoup(res.content, 'html.parser')
+
+    p = soup.find_all('p')
+    h1 = soup.find_all('h1')
+    h2 = soup.find_all('h2')
+    h3 = soup.find_all('h3')
+    h4 = soup.find_all('h4')
+    h5 = soup.find_all('h5')
+    h6 = soup.find_all('h6')
+    li = soup.find_all('li')
+
+    s = ''
+
+    for i in p:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h1:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h2:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h3:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h4:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h5:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h6:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in li:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    content_list.append(s)
+
+for i in range(len(web_list)):
+    web = web_list[i]
+
+    vocab = list(set(w for cl in content_list for w in cl.split()))
+    vocab.sort()
+
+    # TF, IDF, TF-IDF 함수 구현
+    N = len(content_list)  # 총 문서 수
+
+
+    def tf(t, d):
+        return d.count(t)
+
+
+    def idf(t):
+        df = 0
+        for doc in web_list:
+            df += t in doc
+        return log(N / (df + 1))
+
+
+    def tfidf(t, d):
+        return tf(t, d) * idf(t)
+
+
+    # TF-IDF 행렬 출력
+    result = {}
+    for j in range(len(vocab)):
+        result[j] = tfidf(vocab[j], content_list[i])
+
+    result_ = sorted(result.items(), reverse=True, key=lambda item: item[1])
+    for j in range(10):
+        print(vocab[result_[j][0]], end=' ')
+    print("")
