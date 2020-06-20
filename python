@@ -164,20 +164,23 @@ for j in range(len(lines)):
 
 #tf-idf 계산
 idf_d = compute_idf()
+tfidf_list = []
 for cl in content_list:
     tf_d = compute_tf(cl)
 
     sort_tf_d = sorted(tf_d.items(), reverse=True, key=lambda item: item[1])
     top_10 = list(sort_tf_d[:10])
+    tfidf_list.append(top_10)
 
-    print(">>>tf-idf")
+    '''print(">>>tf-idf")
     for i in range(len(top_10)):
         print(i, top_10[i])
-    print("")
+    print("")'''
 
 #Cosine Similarity
 make_word_d()
 vector = []
+cosine_list = []
 
 for i in range(len(content_list)):
     vector.append(make_vector(i))
@@ -191,5 +194,6 @@ for i in range(len(content_list)):
         cosine[j] = cossimil
     cosine_d = sorted(cosine.items(), reverse=True, key=lambda item: item[1])
     top_3 = list(cosine_d[:3])
+    cosine_list.append(top_3)
 
-    print(i, "번째 웹페이지와 비슷한 웹페이지는 ", top_3[0], top_3[1], top_3[2], "이다")
+    '''print(i, "번째 웹페이지와 비슷한 웹페이지는 ", top_3[0], top_3[1], top_3[2], "이다")'''
