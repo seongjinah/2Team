@@ -195,5 +195,5 @@ for i in range(len(content_list)):
     top_3_set = list(cosine_d[:3])
     top_3 = []
     for t3 in top_3_set:
-        top_3.append(t3[0])
+        top_3.append(lines[t3[0]])
     cosine_list.append(top_3)
