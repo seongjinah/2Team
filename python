@@ -97,7 +97,7 @@ lines = list(set(web_list))
 time_list = []
 num_list = []
 content_list = []
-'''
+
 for j in range(len(lines)):
     start = time.time()
 
@@ -162,13 +162,6 @@ for j in range(len(lines)):
     #깔끔한 s(s_list)를 content_list에 저장
     s = ' '.join(s_list)
     content_list.append(s)
-'''
-
-content_list = []
-for i in range(len(lines)):
-    filename = str(i) + 'crawling.txt'
-    with open(filename, 'r', encoding='utf8') as f:
-        content_list.append(f.readline())
 
 #tf-idf 계산
 idf_d = compute_idf()
