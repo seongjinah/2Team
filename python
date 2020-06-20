@@ -11,6 +11,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
 import math
+import sys
+from elasticsearch import Elasticsearch
 
 word_d = {}
 
@@ -60,7 +62,6 @@ def make_word_d():
 
 def make_vector(i):
     v = []
-    print(i, content_list[i])
     s = content_list[i]
     tokenized = word_tokenize(s)
     for w in word_d.keys():
@@ -96,7 +97,7 @@ lines = list(set(web_list))
 time_list = []
 num_list = []
 content_list = []
-
+'''
 for j in range(len(lines)):
     start = time.time()
 
@@ -161,6 +162,13 @@ for j in range(len(lines)):
     #깔끔한 s(s_list)를 content_list에 저장
     s = ' '.join(s_list)
     content_list.append(s)
+'''
+
+content_list = []
+for i in range(len(lines)):
+    filename = str(i) + 'crawling.txt'
+    with open(filename, 'r', encoding='utf8') as f:
+        content_list.append(f.readline())
 
 #tf-idf 계산
 idf_d = compute_idf()
@@ -169,13 +177,11 @@ for cl in content_list:
     tf_d = compute_tf(cl)
 
     sort_tf_d = sorted(tf_d.items(), reverse=True, key=lambda item: item[1])
-    top_10 = list(sort_tf_d[:10])
+    top_10_set = list(sort_tf_d[:10])
+    top_10 = []
+    for t10 in top_10_set:
+        top_10.append(t10[0])
     tfidf_list.append(top_10)
-
-    '''print(">>>tf-idf")
-    for i in range(len(top_10)):
-        print(i, top_10[i])
-    print("")'''
 
 #Cosine Similarity
 make_word_d()
@@ -193,7 +199,8 @@ for i in range(len(content_list)):
         cossimil = dotpro/(npl.norm(vector[i]) * npl.norm(vector[j]))
         cosine[j] = cossimil
     cosine_d = sorted(cosine.items(), reverse=True, key=lambda item: item[1])
-    top_3 = list(cosine_d[:3])
+    top_3_set = list(cosine_d[:3])
+    top_3 = []
+    for t3 in top_3_set:
+        top_3.append(t3[0])
     cosine_list.append(top_3)
-
-    '''print(i, "번째 웹페이지와 비슷한 웹페이지는 ", top_3[0], top_3[1], top_3[2], "이다")'''
