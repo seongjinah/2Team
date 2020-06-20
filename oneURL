@@ -1,0 +1,61 @@
+@app.route('/one_url', methods=['POST'])
+def one_url():
+    error = None
+    address = request.form['onename']
+
+    nltk.download("stopwords")
+
+    swlist = []
+    for sw in stopwords.words("english"):
+        swlist.append(sw)
+
+    start = time.time() #시작시간
+
+    res = requests.get(address)
+    soup = BeautifulSoup(res.content, 'html.parser')
+
+    p = soup.find_all('p')
+    h1 = soup.find_all('h1')
+    h2 = soup.find_all('h2')
+    h3 = soup.find_all('h3')
+    h4 = soup.find_all('h4')
+    h5 = soup.find_all('h5')
+    h6 = soup.find_all('h6')
+    li = soup.find_all('li')
+
+    s = ''
+
+    for i in p:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h1:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h2:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h3:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h4:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h5:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in h6:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    for i in li:
+        s += i.text.replace('\n', '').strip() + ' '
+
+    #특수문자 제거
+    s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
+
+    #단어 개수 세기
+    crawling_num = len(s.split())
+
+    #시간 계산
+    crawling_time = time.time()-start
+
+    return render_template('2Team.html', value=address, num=crawling_num, time=crawling_time)
