@@ -1,16 +1,23 @@
 #!/bin/bash
 
 pip install numpy
-pip install scipy
-pip install scikit-learn
 pip install django
+pip install nltk
+
 
 if [ ! -d templates ]; then
 	mkdir templates
 fi
 
-cp -f 2Team.html templates
-cp -f moreurl.html templates
-cp -f cosinesimilarity.html templates
+cp -f 1.html templates
+cp -f 2-1.html templates
+cp -f 2-2.html templates
+cp -f 3-1.html templates
+cp -f 3-2.html templates
+cp -f 4-1.html templates
+cp -f 4-2.html templates
+
+
+$HOME/elasticsearch-7.6.2/bin/elasticsearch -d
 
 flask run
