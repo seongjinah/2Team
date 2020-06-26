@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+
+.body{
+    background-color:#FFD962;
+    text-align: center;
+    font-family: 'Do Hyeon', sans-serif;
+}
+
+.outerbox{
+    margin-top:100px;
+}
+
+.body h1{
+   font-size:55px;
+}
+
+.innerbox{
+    background-color: #FFF2C9;
+    margin: 20px auto;
+    height: 200px;
+    width: 700px;
+    border-radius: 30px;
+    padding-top: 20px;
+}
+
+.innerbox input{
+    width: 500px;
+    height: 45px;
+    font-size: 22px;
+    vertical-align: bottom;
+}
+
+.innerbox form{
+    padding-top: 20px;
+}
+
+font-family: 'Black Han Sans', sans-serif;
+font-family: 'Do Hyeon', sans-serif;
+font-family: 'Merriweather', serif;
+font-family: 'Source Sans Pro', sans-serif;
