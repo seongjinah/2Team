@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<html>
+	<head>
+		<title>2Team_OpenSource_TemaProject_textfile</title>
+		<style>
+			h1 { text-align: center; }
+		</style>
+	</head>
+	<body>
+		<h1>URL Analysis Service</h1>
+		<h3>text file: {{ filename }} </h3>
+		<br>
+		{% if k == 0 %}
+			<h3>crawling and analysis success!</h3>
+		{% else %}
+			<h3>crawling and analysis fail</h3>
+		{% endif %}
+		{% if multi == True %}
+			<h3>중복 url이 있어서 제거하였습니다</h3>
+		{% endif %}
+		<br>
+		{% for i in range(0,url_list|length)%}
+			<h5>{{ url_list[i] }}</h5>
+			<h5>{{ num_list[i] }}</h5>
+			<h5>{{ time_list[i] }}</h5>
+			<form method="POST" action="/tf_idf">
+				<input type="hidden" name="name" value={{ name[i] }}>
+				<input type="submit" name="tfidf" value="tfidf" style="width:90px;height:40px;border-radius:10px;font-size:120%">
+			</form>
+			
+			<form method="POST" action="/cosine">
+				<input type="hidden" name="name" value={{ name[i] }}>
+				<input type="submit" name="similarity" value="similarity" style="width:90px;height:40px;border-radius:10px;font-size:120%">
+			</form>			
+			<br>
+		{% endfor %} 
+	</body>
+</html>
