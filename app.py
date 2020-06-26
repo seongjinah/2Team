@@ -292,7 +292,7 @@ def textfile():
         tf_10 = []
         for t10 in top_10_set:
             top_10.append(t10[0])
-            tf_10.append(t10[1])
+            tf_10.append(round(t10[1], 3))
         tfidf_word_list.append(top_10)
         tfidf_value_list.append(tf_10)
 
@@ -319,7 +319,7 @@ def textfile():
         cs_3 = []
         for t3 in top_3_set:
             top_3.append(lines[t3[0]])
-            cs_3.append(t3[1])
+            cs_3.append(round(t3[1],3))
         cosine_web_list.append(top_3)
         cosine_value_list.append(cs_3)
 
