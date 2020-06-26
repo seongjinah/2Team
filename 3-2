@@ -10,14 +10,14 @@
 	<body class='body'>
         <div class="outerbox">
             <div class="innerbox">
-                <!--{% if k == 0 %}-->
+                {% if k == 0 %}
                     <p class="isSuccess">URL 분석 성공!</p>
-                <!--{% else %}
+                {% else %}
                     <p class="isSuccess">URL 분석 실패!</p>
                 {% endif %}
-                {% if multi == True %}-->
+                {% if multi == True %}
                     <p class="overlap">중복 url을 제거하였습니다</p>
-                <!--{% endif %}-->
+                {% endif %}
             </div>
             <table>
                 <thead id="index">
