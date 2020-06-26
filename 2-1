@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+	</head>
+	<body>
+		<br><br>
+		<h1 style="text-align:center;">Please Input an URL</h1>
+		<br><br>
+		<center>
+		<form method="POST" action="/one_url">
+		<input name="onename" type="text" placeholder="Please Input one url!" style="width: 500px;height:40px;fond-size:120%">
+		<input type="submit" name="enter1" value="Enter" style="width:90px;height:40px;border-radius:10px;fond-size:120%">
+		</form>
+		<br><br>
+		</center>
+		
+	</body>
+</html>
