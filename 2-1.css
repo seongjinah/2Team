@@ -34,6 +34,29 @@
     padding-top: 20px;
 }
 
+.home{
+    float: right;
+}
+
+.body img{
+    width: 50px;
+    height:50px;
+}
+
+.body .home{
+    text-align: right;
+    margin-right: 100px;
+    padding: 20px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.tohome{
+    text-align: center;
+    margin-top: 7px;
+}
+
 font-family: 'Black Han Sans', sans-serif;
 font-family: 'Do Hyeon', sans-serif;
 font-family: 'Merriweather', serif;
