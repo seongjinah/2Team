@@ -112,16 +112,10 @@ def one_url():
     value = 0
     address = request.form['onename']
 
-    nltk.download("stopwords")
-
-    swlist = []
-    for sw in stopwords.words("english"):
-        swlist.append(sw)
-
     start = time.time() #시작시간
 
-    res = requests.get(address)
-    soup = BeautifulSoup(res.content, 'html.parser')
+    resq = requests.get(address)
+    soup = BeautifulSoup(resq.content, 'html.parser')
 
     p = soup.find_all('p')
     h1 = soup.find_all('h1')
