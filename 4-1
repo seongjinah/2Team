@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<html>
+	<head>
+	</head>
+	<body>
+		<h2>{{ url }}</h2>
+		<br>
+		<h4>top 10 main word list</h4>
+		<br>
+		{% for i in range(0,tf|length)%}
+			<h5>{{ tf[i] }}</h5>
+		{% endfor %}
+	</body>
+</html>
