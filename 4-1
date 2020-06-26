@@ -1,14 +1,82 @@
 <!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
 <html>
 	<head>
+		<title>2Team_OpenSource_TeamProject_textfile</title>  
+		<style type="text/css">
+		div#list{
+		width:1200px;
+		height:80px;
+		margin-right:5px;
+		margin-left:140px;
+		float:center;
+		}
+		#index{
+		width:1200px;
+		height:60px;
+		margin-right:5px;
+		margin-left:140px;
+		float:center;
+		}
+		#index_num{
+		width:15%;
+		height:95%;
+		background-color:blue;
+		float:left;
+		margin:5px;
+		}
+		#index_name{
+		width:60%;
+		height:95%;
+		background-color:aliceblue;
+		float:left;
+		margin:5px;
+		}
+		#index_tf{
+		width:20%;
+		height:95%;
+		background-color:red;
+		float:left;
+		margin:5px;
+		}
+		#num{
+		width:15%;
+		height:95%;
+		background-color:blue;
+		float:left;
+		margin:5px;
+		}
+		#name{
+		width:60%;
+		height:95%;
+		background-color:aliceblue;
+		float:left;
+		margin:5px;
+		}
+		#tf-idf{
+		width:20%;
+		height:95%;
+		background-color:red;
+		float:left;
+		margin:5px;
+		}
+		</style>
 	</head>
 	<body>
 		<h2>{{ url }}</h2>
 		<br>
 		<h4>top 10 main word list</h4>
 		<br>
+		<div id="index">
+			<div id="index_num" style="font-size:150%;text-align:center;line-height:50px">Number</div>
+			<div id="index_name" style="font-size:150%;text-align:center;line-height:50px">Web name</div>
+			<div id="index_tf" style="font-size:150%;text-align:center;line-height:50px">Value of Tf-idf</div>
+		</div>	
 		{% for i in range(0,tf|length)%}
-			<h5>{{ tf[i] }}</h5>
+			<div id="list">
+				<div id="num" style="font-size:150%;text-align:center;line-height:60px">{{ i+1 }}</div>
+				<div id="name" style="font-size:150%;text-align:center;line-height:60px">{{ tf[i] }}</div>
+				<div id="tf-idf" style="font-size:150%;text-align:center;line-height:60px">0.2</div>
+			</div>
 		{% endfor %}
 	</body>
 </html>
