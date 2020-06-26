@@ -162,7 +162,7 @@ def one_url():
     crawling_num = len(s.split())
 
     #시간 계산
-    crawling_time = time.time()-start
+    crawling_time = round(time.time()-start, 3)
 
     doc = {}
     doc = {
@@ -256,7 +256,7 @@ def textfile():
         num_list.append(len(s.split()))
 
         #시간 계산
-        time_list.append(time.time()-start)
+        time_list.append(round(time.time()-start, 3))
 
         #s에서 stopwords 제외 -> s_list
         s_list = []
