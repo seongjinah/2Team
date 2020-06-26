@@ -69,13 +69,13 @@
 		<div id="index">
 			<div id="index_num" style="font-size:150%;text-align:center;line-height:50px">Number</div>
 			<div id="index_name" style="font-size:150%;text-align:center;line-height:50px">Web name</div>
-			<div id="index_tf" style="font-size:150%;text-align:center;line-height:50px">Value of Tf-idf</div>
+			<div id="index_tf" style="font-size:150%;text-align:center;line-height:50px">Tf-idf</div>
 		</div>	
 		{% for i in range(0,tf|length)%}
 			<div id="list">
 				<div id="num" style="font-size:150%;text-align:center;line-height:60px">{{ i+1 }}</div>
 				<div id="name" style="font-size:150%;text-align:center;line-height:60px">{{ tf[i] }}</div>
-				<div id="tf-idf" style="font-size:150%;text-align:center;line-height:60px">0.2</div>
+				<div id="tf-idf" style="font-size:150%;text-align:center;line-height:60px">{{ tf_value[i] }}</div>
 			</div>
 		{% endfor %}
 	</body>
