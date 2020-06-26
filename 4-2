@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
+<html>
+	<head>
+	</head>
+	<body>
+		<h2>{{ url }}</h2>
+		<br>
+		<h4>top 3 similar web url</h4>
+		<br>
+		{% for i in range(0,cosine|length)%}
+			<h5>{{ cosine[i] }}</h5>
+		{% endfor %}
+	</body>
+</html>
