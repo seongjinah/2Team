@@ -2,22 +2,21 @@
 <html>
 	<head>
 		<title>2Team_OpenSource_TemaProject_textfile</title>
-		<style>
-			h1 { text-align: center; }
-		</style>
+        <link rel="stylesheet" href="3-1.css">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	</head>
-	<body>
-		<h1>URL Analysis Service</h1>
-		<br>
-		{% if k == 0 %}
-			<h3>crawling and analysis success!</h3>
-		{% else %}
-			<h3>crawling and analysis fail</h3>
-		{% endif %}
-		<br>
-		<h5>{{ address }} </h5>
-		<h5>{{ value }}</h5>
-		<h5>{{ num }}</h5>
-		<h5>{{ time }}</h5>
+	<body class='body'>
+        <div class='outerbox'>
+            <div class="innerbox">
+                {% if k == 0 %}
+                    <p>URL 분석 성공!</p>
+                {% else %}
+                    <p>URL 분석을 실패!</p>
+                {% endif %}
+                <p class="sentence">웹 페이지 '{{ address }}'는 {{ num }}개의 단어로 이루어져 있고, 분석하는데에 {{ time }}초가 걸렸습니다.</p>
+            </div>
+        </div>
 	</body>
 </html>
