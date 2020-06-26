@@ -329,8 +329,10 @@ def textfile():
             'url': lines[j],
             'word_num': num_list[j],
             'time': time_list[j],
-            'tf-idf': tfidf_list[j],
-            'cosine-similarity': cosine_list[j]
+            'tf-idf': tfidf_word_list[j],
+            'tfidf-value': tfidf_value_list[j],
+            'cosine-similarity': cosine_web_list[j],
+            'cosine_value': cosine_value_list[j]
         }
 
         name = 'text_url' + str(j)
@@ -351,13 +353,15 @@ def tf_idf():
     error = None
     name = request.form['name']
     tf_list = []
+    tf_value = []
 
     results = es.search(index=name, body={'from': 0, 'size': 100})
 
     for result in results['hits']['hits']:
         tf_list.extend(result['_source']['tf-idf'])
+        tf_value.extend(result['_source']['tfidf-value'])
         url = result['_source']['url']
-    return render_template('4-1.html', tf=tf_list, url=url)
+    return render_template('4-1.html', tf=tf_list, tf_value=tf_value, url=url)
 
 
 @app.route('/cosine', methods=['GET', 'POST'])
@@ -365,11 +369,13 @@ def cosine():
     error = None
     name = request.form['name']
     cosine_list = []
+    cosine_value = []
 
     results = es.search(index=name, body={'from': 0, 'size': 100})
 
     for result in results['hits']['hits']:
         cosine_list.extend(result['_source']['cosine-similarity'])
+        cosine_value.extend(result['_source']['cosine_value'])
         url = result['_source']['url']
-    return render_template('4-2.html', cosine=cosine_list, url=url)
+    return render_template('4-2.html', cosine=cosine_list, cosine_value=cosine_value, url=url)
 
