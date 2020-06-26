@@ -35,9 +35,11 @@
                         <td class="time">{{ time_list[i] }}</td>
                         <td class="Analysis">
                             <form method="POST" action="/tf_idf" class="analysis_btn">
+                                <input type="hidden" name="name" value={{ name[i] }}>
                                 <button type="submit" name="tfidf" value="tfidf" class="cl btn btn-dark ">TF-IDF</button>
                             </form>
                             <form method="POST" action="/cosine" class="analysis_btn">
+                                <input type="hidden" name="name" value={{ name[i] }}>
                                 <button type="submit" name="similarity" value="similarity" class="cl btn btn-dark ">Similarity</button>
                             </form>
                         </td>
