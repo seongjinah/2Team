@@ -1,9 +1,92 @@
 <!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.0 Transitional//EN”>
 <html>
 	<head>
-		<title>2Team_OpenSource_TemaProject_textfile</title>
-		<style>
-			h1 { text-align: center; }
+		<title>2Team_OpenSource_TeamProject_textfile</title>  
+		<style type="text/css">
+		div#list{
+		width:1800px;
+		height:100px;
+		margin-right:5px;
+		margin-left:5px;
+		float:center;
+		}
+		#index{
+		width:1800px;
+		height:60px;
+		margin-right:5px;
+		margin-left:5px;
+		float:center;
+		}
+		#index_name{
+		width:55%;
+		height:95%;
+		background-color:aliceblue;
+		float:left;
+		margin:5px;
+		}
+		#index_num{
+		width:10%;
+		height:95%;
+		background-color:red;
+		float:left;
+		margin:5px;
+		}
+		#index_time{
+		width:10%;
+		height:95%;
+		background-color:blue;
+		float:left;
+		margin:5px;
+		}
+		#index_tf{
+		width:10%;
+		height:95%;
+		background-color:green;
+		float:left;
+		margin:5px;
+		}
+		#index_cosine{
+		width:10%;
+		height:95%;
+		background-color:yellow;
+		float:left;
+		margin:5px;
+		}
+		#web_name{
+		width:55%;
+		height:95%;
+		background-color:aliceblue;
+		float:left;
+		margin:5px;
+		}
+		#num{
+		width:10%;
+		height:95%;
+		background-color:red;
+		float:left;
+		margin:5px;
+		}
+		#time{
+		width:10%;
+		height:95%;
+		background-color:blue;
+		float:left;
+		margin:5px;
+		}
+		#tf{
+		width:10%;
+		height:95%;
+		background-color:green;
+		float:left;
+		margin:5px;
+		}
+		#cosine{
+		width:10%;
+		height:95%;
+		background-color:yellow;
+		float:left;
+		margin:5px;
+		}
 		</style>
 	</head>
 	<body>
@@ -19,20 +102,34 @@
 			<h3>중복 url이 있어서 제거하였습니다</h3>
 		{% endif %}
 		<br>
+		<hr>
+		<div id="index">
+			<div id="index_name" style="font-size:150%;text-align:center;line-height:50px">Web name</div>
+			<div id="index_num" style="font-size:150%;text-align:center;line-height:50px">Word count</div>
+			<div id="index_time" style="font-size:150%;text-align:center;line-height:50px">Analysis time</div>
+			<div id="index_tf" style="font-size:150%;text-align:center;line-height:50px">Tf-idf</div>
+			<div id="index_cosine" style="font-size:150%;text-align:center;line-height:50px">Similarity</div>
+		</div>	
 		{% for i in range(0,url_list|length)%}
-			<h5>{{ url_list[i] }}</h5>
-			<h5>{{ num_list[i] }}</h5>
-			<h5>{{ time_list[i] }}</h5>
-			<form method="POST" action="/tf_idf">
-				<input type="hidden" name="name" value={{ name[i] }}>
-				<input type="submit" name="tfidf" value="tfidf" style="width:90px;height:40px;border-radius:10px;font-size:120%">
-			</form>
-			
-			<form method="POST" action="/cosine">
-				<input type="hidden" name="name" value={{ name[i] }}>
-				<input type="submit" name="similarity" value="similarity" style="width:90px;height:40px;border-radius:10px;font-size:120%">
-			</form>			
-			<br>
+			<div id="list">
+				<div id="web_name" style="font-size:130%;text-align:center;line-height:90px">{{ url_list[i] }}</div>
+				<div id="num" style="font-size:130%;text-align:center;line-height:90px">{{ num_list[i] }}</div>
+				<div id="time" style="font-size:130%;text-align:center;line-height:90px">{{ time_list[i] }}</div>
+				<div id="tf" style="font-size:130%;text-align:center;line-height:30px">
+					<form method="POST" action="/tf_idf">
+					<input type="hidden" name="name" value={{ name[i] }}>
+					<br>
+					<input type="submit" name="tfidf" value="tfidf" style="width:130px;height:70px;font-size:120%">
+					</form>
+				</div>
+				<div id="cosine" style="font-size:130%;text-align:center;line-height:30px">
+					<form method="POST" action="/cosine">
+					<input type="hidden" name="name" value={{ name[i] }}>
+					<br>
+					<input type="submit" name="similarity" value="similarity" style="width:130px;height:70px;font-size:120%">
+					</form>		
+				</div>
+			</div>					
 		{% endfor %} 
 	</body>
 </html>
