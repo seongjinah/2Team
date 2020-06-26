@@ -19,10 +19,11 @@ import math
 
 app = Flask(__name__)
 
-es_host="0.0.0.0"
-es_port="9200"
+es_host = "0.0.0.0"
+es_port = "9200"
 
 word_d = {}
+
 
 def compute_tf(s):
     bow = set()
@@ -37,9 +38,10 @@ def compute_tf(s):
 
     tf_d = {}
     for word, count in wordcount_d.items():
-        tf_d[word] = float(count)/len(bow)
+        tf_d[word] = float(count) / len(bow)
 
     return tf_d
+
 
 def compute_idf():
     Dval = len(content_list)
@@ -56,9 +58,10 @@ def compute_idf():
         for s in content_list:
             if t in word_tokenize(s):
                 cnt += 1
-        idf_d[t] = math.log(Dval/(cnt+1))
+        idf_d[t] = math.log(Dval / (cnt + 1))
 
     return idf_d
+
 
 def make_word_d():
     for i in range(len(content_list)):
@@ -68,6 +71,7 @@ def make_word_d():
                 word_d[word] = 0
             word_d[word] += 1
 
+
 def make_vector(i):
     v = []
     s = content_list[i]
@@ -75,13 +79,14 @@ def make_vector(i):
     for w in word_d.keys():
         val = 0
         for t in tokenized:
-            if t==w:
+            if t == w:
                 val += 1
         v.append(val)
     return v
 
+
 #######################################################################################
-#main
+# main
 
 nltk.download("stopwords")
 nltk.download("punkt")
@@ -92,27 +97,31 @@ for sw in stopwords.words("english"):
 
 web_list = []
 content_list = []
-es = Elasticsearch([{'host':es_host, 'port':es_port}], timeout = 30)
+es = Elasticsearch([{'host': es_host, 'port': es_port}], timeout=30)
+
 
 @app.route('/')
 def start():
-	return render_template('1.html')
+    return render_template('1.html')
+
 
 @app.route('/input1')
 def input1():
-	return render_template('2-1.html')
+    return render_template('2-1.html')
+
 
 @app.route('/input2')
 def input2():
-	return render_template('2-2.html')
+    return render_template('2-2.html')
 
-@app.route('/one_url', methods=['GET','POST'])
+
+@app.route('/one_url', methods=['GET', 'POST'])
 def one_url():
     error = None
     value = 0
     address = request.form['onename']
 
-    start = time.time() #시작시간
+    start = time.time()  # 시작시간
 
     resq = requests.get(address)
     soup = BeautifulSoup(resq.content, 'html.parser')
@@ -153,25 +162,25 @@ def one_url():
         s += i.text.replace('\n', '').strip() + ' '
 
     if s == '':
-            value = value + 1
+        value = value + 1
 
-    #특수문자 제거
+    # 특수문자 제거
     s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
 
-    #단어 개수 세기
+    # 단어 개수 세기
     crawling_num = len(s.split())
 
-    #시간 계산
-    crawling_time = round(time.time()-start, 3)
+    # 시간 계산
+    crawling_time = round(time.time() - start, 3)
 
     doc = {}
     doc = {
-        'url':address,
-        'word_num':crawling_num,
-        'time':crawling_time,
-        }
+        'url': address,
+        'word_num': crawling_num,
+        'time': crawling_time,
+    }
 
-    res=es.index(index='one_url', doc_type='data', id='1', body=doc)
+    res = es.index(index='one_url', doc_type='data', id='1', body=doc)
 
     if value == 0:
         k = 0
@@ -192,7 +201,7 @@ def textfile():
             web_list.extend(line)
 
     multi = False
-    if(len(web_list) != len(set(web_list))):
+    if (len(web_list) != len(set(web_list))):
         multi = True
 
     lines = []
@@ -249,43 +258,49 @@ def textfile():
         if s == '':
             value = value + 1
 
-        #특수문자 제거
+        # 특수문자 제거
         s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
 
         # 단어수 계산
         num_list.append(len(s.split()))
 
-        #시간 계산
-        time_list.append(round(time.time()-start, 3))
+        # 시간 계산
+        time_list.append(round(time.time() - start, 3))
 
-        #s에서 stopwords 제외 -> s_list
+        # s에서 stopwords 제외 -> s_list
         s_list = []
         tokenized = word_tokenize(s)
         for tok in tokenized:
             if tok not in swlist:
                 s_list.append(tok)
 
-        #깔끔한 s(s_list)를 content_list에 저장
+        # 깔끔한 s(s_list)를 content_list에 저장
         s = ' '.join(s_list)
         content_list.append(s)
 
-    #tf-idf 계산
+    # tf-idf 계산
     idf_d = compute_idf()
-    tfidf_list = []
+    tfidf_word_list = []
+    tfidf_value_list = []
+
     for cl in content_list:
         tf_d = compute_tf(cl)
 
         sort_tf_d = sorted(tf_d.items(), reverse=True, key=lambda item: item[1])
         top_10_set = list(sort_tf_d[:10])
         top_10 = []
+        tf_10 = []
         for t10 in top_10_set:
             top_10.append(t10[0])
-        tfidf_list.append(top_10)
+            tf_10.append(t10[1])
+        tfidf_word_list.append(top_10)
+        tfidf_value_list.append(tf_10)
 
-    #Cosine Similarity
+    # Cosine Similarity
     make_word_d()
     vector = []
-    cosine_list = []
+    cosine_web_list = []
+    cosine_value_list = []
     index_name = []
 
     for i in range(len(content_list)):
@@ -296,27 +311,30 @@ def textfile():
         for j in range(len(content_list)):
             if i == j: continue
             dotpro = dot(vector[i], vector[j])
-            cossimil = dotpro/(npl.norm(vector[i]) * npl.norm(vector[j]))
+            cossimil = dotpro / (npl.norm(vector[i]) * npl.norm(vector[j]))
             cosine[j] = cossimil
         cosine_d = sorted(cosine.items(), reverse=True, key=lambda item: item[1])
         top_3_set = list(cosine_d[:3])
         top_3 = []
+        cs_3 = []
         for t3 in top_3_set:
             top_3.append(lines[t3[0]])
-        cosine_list.append(top_3)
-    
+            cs_3.append(t3[1])
+        cosine_web_list.append(top_3)
+        cosine_value_list.append(cs_3)
+
     for j in range(len(lines)):
         doc = {}
         doc = {
-            'url':lines[j],
-            'word_num':num_list[j],
-            'time':time_list[j],
-            'tf-idf':tfidf_list[j],
-            'cosine-similarity':cosine_list[j]
+            'url': lines[j],
+            'word_num': num_list[j],
+            'time': time_list[j],
+            'tf-idf': tfidf_list[j],
+            'cosine-similarity': cosine_list[j]
         }
 
         name = 'text_url' + str(j)
-        res=es.index(index=name, doc_type='data', id=j, body=doc)
+        res = es.index(index=name, doc_type='data', id=j, body=doc)
         index_name.append(name)
 
     if value == 0:
@@ -324,32 +342,34 @@ def textfile():
     else:
         k = 1
 
-    return render_template('3-2.html', filename = FileName, url_list = lines, num_list= num_list, time_list = time_list, k = k, multi = multi, name=index_name)
+    return render_template('3-2.html', filename=FileName, url_list=lines, num_list=num_list, time_list=time_list, k=k,
+                           multi=multi, name=index_name)
 
-@app.route('/tf_idf', methods=['GET','POST'])
+
+@app.route('/tf_idf', methods=['GET', 'POST'])
 def tf_idf():
     error = None
     name = request.form['name']
     tf_list = []
 
-    results = es.search(index = name, body={'from':0, 'size':100})
+    results = es.search(index=name, body={'from': 0, 'size': 100})
 
     for result in results['hits']['hits']:
         tf_list.extend(result['_source']['tf-idf'])
         url = result['_source']['url']
-    return render_template('4-1.html', tf = tf_list, url = url)
-    
+    return render_template('4-1.html', tf=tf_list, url=url)
 
-@app.route('/cosine', methods=['GET','POST'])
+
+@app.route('/cosine', methods=['GET', 'POST'])
 def cosine():
     error = None
     name = request.form['name']
     cosine_list = []
 
-    results = es.search(index = name, body={'from':0, 'size':100})
+    results = es.search(index=name, body={'from': 0, 'size': 100})
 
     for result in results['hits']['hits']:
         cosine_list.extend(result['_source']['cosine-similarity'])
         url = result['_source']['url']
-    return render_template('4-2.html', cosine = cosine_list, url = url)
-    
+    return render_template('4-2.html', cosine=cosine_list, url=url)
+
