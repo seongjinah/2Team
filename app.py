@@ -114,6 +114,10 @@ def input1():
 def input2():
     return render_template('2-2.html')
 
+@app.route('/home')
+def home():
+    return render_template('1.html')
+
 
 @app.route('/one_url', methods=['GET', 'POST'])
 def one_url():
