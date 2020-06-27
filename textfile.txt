@@ -1,0 +1,8 @@
+https://cassandra.apache.org/
+http://empire-db.apache.org/
+http://hive.apache.org/
+http://hbase.apache.org/
+http://hbase.apache.org/
+https://camel.apache.org/
+http://mesos.apache.org/
+https://ignite.apache.org/ 
