@@ -30,7 +30,7 @@
                     <tr>
                         <th class="name">Web Name</th>
                         <th class="count">Word Count</th>
-                        <th class="time">Analysis Time</th>
+                        <th class="time">Time(sec)</th>
                         <th class="Analysis">Analysis</th>
                 </thead>
                 <tbody>
