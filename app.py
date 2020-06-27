@@ -95,8 +95,6 @@ swlist = []
 for sw in stopwords.words("english"):
     swlist.append(sw)
 
-web_list = []
-content_list = []
 es = Elasticsearch([{'host': es_host, 'port': es_port}], timeout=30)
 
 
@@ -197,6 +195,8 @@ def one_url():
 @app.route('/textfile', methods=['GET', 'POST'])
 def textfile():
     error = None
+    web_list = []
+    content_list = []
     FileName = request.form['FileName']
     with open(FileName, 'r') as f:
         while 1:
