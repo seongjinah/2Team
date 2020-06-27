@@ -4,6 +4,7 @@ pip install numpy
 pip install django
 pip install nltk
 
+$HOME/elasticsearch-7.6.2/bin/elasticsearch -d
 
 if [ ! -d templates ]; then
     mkdir templates
@@ -29,7 +30,5 @@ cp -f 3-2.css static/css
 cp -f 4-1.css static/css
 cp -f 4-2.css static/css
 
-
-$HOME/elasticsearch-7.6.2/bin/elasticsearch -d
 
 flask run 
