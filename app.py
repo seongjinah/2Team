@@ -197,8 +197,8 @@ def one_url():
 @app.route('/textfile', methods=['GET', 'POST'])
 def textfile():
     error = None
-    web_list = []
-    content_list = []
+    web_list.clear()
+    content_list.clear()
     FileName = request.form['FileName']
     with open(FileName, 'r') as f:
         while 1:
