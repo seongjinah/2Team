@@ -61,6 +61,15 @@
     margin-top: 7px;
 }
 
+.warning{
+    text-align: start;
+    margin-left: 50px;
+    margin-top:50px;
+    margin-bottom: 30px;
+    color:chocolate;
+}
+
+
 font-family: 'Black Han Sans', sans-serif;
 font-family: 'Do Hyeon', sans-serif;
 font-family: 'Merriweather', serif;
