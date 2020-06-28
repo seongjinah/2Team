@@ -16,7 +16,7 @@
         </button>
         <div class="outerbox">
             <div class="innerbox">
-                <p class="isSuccess">URL 분석 성공!</p>
+                    <p class="isSuccess">URL 분석 성공!</p>
                 {% if multi == True %}
                     <p class="overlap">중복 url을 제거하였습니다</p>
                 {% endif %}
@@ -30,7 +30,7 @@
                         <th class="Analysis">Analysis</th>
                 </thead>
                 <tbody>
-                    {% for i in range(0,url_list|length)%}
+                    <!--{% for i in range(0,url_list|length)%}-->
                     <tr>
                         <td class="name">{{ url_list[i] }}</td>
                         <td class="count">{{ num_list[i] }}</td>
@@ -47,7 +47,7 @@
                         </td>
                     </tr>
                 </tbody>				
-                {% endfor %}
+                <!--{% endfor %}-->
             </table>
         </div>
 	</body>
