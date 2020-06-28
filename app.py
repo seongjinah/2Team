@@ -122,110 +122,13 @@ def home():
 @app.route('/one_url', methods=['GET', 'POST'])
 def one_url():
     error = None
-    value = 0
-    address = request.form['onename']
+    try:
+        address = request.form['onename']
 
-    start = time.time()  # 시작시간
+        start = time.time()  # 시작시간
 
-    resq = requests.get(address)
-    soup = BeautifulSoup(resq.content, 'html.parser')
-
-    p = soup.find_all('p')
-    h1 = soup.find_all('h1')
-    h2 = soup.find_all('h2')
-    h3 = soup.find_all('h3')
-    h4 = soup.find_all('h4')
-    h5 = soup.find_all('h5')
-    h6 = soup.find_all('h6')
-    li = soup.find_all('li')
-
-    s = ''
-
-    for i in p:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h1:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h2:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h3:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h4:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h5:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in h6:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    for i in li:
-        s += i.text.replace('\n', '').strip() + ' '
-
-    if s == '':
-        value = value + 1
-
-    # 특수문자 제거
-    s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
-
-    # 단어 개수 세기
-    crawling_num = len(s.split())
-
-    # 시간 계산
-    crawling_time = round(time.time() - start, 3)
-
-    doc = {}
-    doc = {
-        'url': address,
-        'word_num': crawling_num,
-        'time': crawling_time,
-    }
-
-    res = es.index(index='one_url', doc_type='data', id='1', body=doc)
-
-    if value == 0:
-        k = 0
-    else:
-        k = 1
-
-    return render_template('3-1.html', address=address, num=crawling_num, time=crawling_time, k=k)
-
-
-@app.route('/textfile', methods=['GET', 'POST'])
-def textfile():
-    error = None
-    web_list.clear()
-    content_list.clear()
-    FileName = request.form['FileName']
-    with open(FileName, 'r') as f:
-        while 1:
-            line = f.readline().split()
-            if not line: break
-            web_list.extend(line)
-
-    multi = False
-    if (len(web_list) != len(set(web_list))):
-        multi = True
-
-    lines = []
-    for line in web_list:
-        if line not in lines:
-            lines.append(line)
-
-    time_list = []
-    num_list = []
-    value = 0
-
-    for j in range(len(lines)):
-        start = time.time()
-
-        address = lines[j]
-
-        res = requests.get(address)
-        soup = BeautifulSoup(res.content, 'html.parser')
+        resq = requests.get(address)
+        soup = BeautifulSoup(resq.content, 'html.parser')
 
         p = soup.find_all('p')
         h1 = soup.find_all('h1')
@@ -261,98 +164,188 @@ def textfile():
 
         for i in li:
             s += i.text.replace('\n', '').strip() + ' '
+
         if s == '':
             value = value + 1
 
         # 특수문자 제거
         s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
 
-        # 단어수 계산
-        num_list.append(len(s.split()))
+        # 단어 개수 세기
+        crawling_num = len(s.split())
 
         # 시간 계산
-        time_list.append(round(time.time() - start, 3))
+        crawling_time = round(time.time() - start, 3)
 
-        # s에서 stopwords 제외 -> s_list
-        s_list = []
-        tokenized = word_tokenize(s)
-        for tok in tokenized:
-            if tok not in swlist:
-                s_list.append(tok)
-
-        # 깔끔한 s(s_list)를 content_list에 저장
-        s = ' '.join(s_list)
-        content_list.append(s)
-
-    # tf-idf 계산
-    idf_d = compute_idf()
-    tfidf_word_list = []
-    tfidf_value_list = []
-
-    for cl in content_list:
-        tf_d = compute_tf(cl)
-
-        sort_tf_d = sorted(tf_d.items(), reverse=True, key=lambda item: item[1])
-        top_10_set = list(sort_tf_d[:10])
-        top_10 = []
-        tf_10 = []
-        for t10 in top_10_set:
-            top_10.append(t10[0])
-            tf_10.append(round(t10[1], 3))
-        tfidf_word_list.append(top_10)
-        tfidf_value_list.append(tf_10)
-
-    # Cosine Similarity
-    make_word_d()
-    vector = []
-    cosine_web_list = []
-    cosine_value_list = []
-    index_name = []
-
-    for i in range(len(content_list)):
-        vector.append(make_vector(i))
-
-    for i in range(len(content_list)):
-        cosine = {}
-        for j in range(len(content_list)):
-            if i == j: continue
-            dotpro = dot(vector[i], vector[j])
-            cossimil = dotpro / (npl.norm(vector[i]) * npl.norm(vector[j]))
-            cosine[j] = cossimil
-        cosine_d = sorted(cosine.items(), reverse=True, key=lambda item: item[1])
-        top_3_set = list(cosine_d[:3])
-        top_3 = []
-        cs_3 = []
-        for t3 in top_3_set:
-            top_3.append(lines[t3[0]])
-            cs_3.append(round(t3[1],3))
-        cosine_web_list.append(top_3)
-        cosine_value_list.append(cs_3)
-
-    for j in range(len(lines)):
         doc = {}
         doc = {
-            'url': lines[j],
-            'word_num': num_list[j],
-            'time': time_list[j],
-            'tf-idf': tfidf_word_list[j],
-            'tfidf-value': tfidf_value_list[j],
-            'cosine-similarity': cosine_web_list[j],
-            'cosine_value': cosine_value_list[j]
+            'url': address,
+            'word_num': crawling_num,
+            'time': crawling_time,
         }
 
-        name = 'text_url' + str(j)
-        res = es.index(index=name, doc_type='data', id=j, body=doc)
-        index_name.append(name)
+        res = es.index(index='one_url', doc_type='data', id='1', body=doc)
 
-    if value == 0:
-        k = 0
-    else:
-        k = 1
+        return render_template('3-1.html', address=address, num=crawling_num, time=crawling_time)
 
-    return render_template('3-2.html', filename=FileName, url_list=lines, num_list=num_list, time_list=time_list, k=k,
+    except:
+        return render_template('7.html')
+
+
+@app.route('/textfile', methods=['GET', 'POST'])
+def textfile():
+    error = None
+    try:
+        web_list.clear()
+        content_list.clear()
+        FileName = request.form['FileName']
+        with open(FileName, 'r') as f:
+            while 1:
+                line = f.readline().split()
+                if not line: break
+                web_list.extend(line)
+
+        multi = False
+        if (len(web_list) != len(set(web_list))):
+            multi = True
+
+        lines = []
+        for line in web_list:
+            if line not in lines:
+                lines.append(line)
+
+        time_list = []
+        num_list = []
+
+        for j in range(len(lines)):
+            start = time.time()
+
+            address = lines[j]
+
+            res = requests.get(address)
+            soup = BeautifulSoup(res.content, 'html.parser')
+
+            p = soup.find_all('p')
+            h1 = soup.find_all('h1')
+            h2 = soup.find_all('h2')
+            h3 = soup.find_all('h3')
+            h4 = soup.find_all('h4')
+            h5 = soup.find_all('h5')
+            h6 = soup.find_all('h6')
+            li = soup.find_all('li')
+
+            s = ''
+
+            for i in p:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h1:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h2:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h3:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h4:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h5:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in h6:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            for i in li:
+                s += i.text.replace('\n', '').strip() + ' '
+
+            # 특수문자 제거
+            s = re.sub('[\[\]\/!@#$%^&*().,:]', ' ', s)
+
+            # 단어수 계산
+            num_list.append(len(s.split()))
+
+            # 시간 계산
+            time_list.append(round(time.time() - start, 3))
+
+            # s에서 stopwords 제외 -> s_list
+            s_list = []
+            tokenized = word_tokenize(s)
+            for tok in tokenized:
+                if tok not in swlist:
+                    s_list.append(tok)
+
+            # 깔끔한 s(s_list)를 content_list에 저장
+            s = ' '.join(s_list)
+            content_list.append(s)
+
+        # tf-idf 계산
+        idf_d = compute_idf()
+        tfidf_word_list = []
+        tfidf_value_list = []
+
+        for cl in content_list:
+            tf_d = compute_tf(cl)
+
+            sort_tf_d = sorted(tf_d.items(), reverse=True, key=lambda item: item[1])
+            top_10_set = list(sort_tf_d[:10])
+            top_10 = []
+            tf_10 = []
+            for t10 in top_10_set:
+                top_10.append(t10[0])
+                tf_10.append(round(t10[1], 3))
+            tfidf_word_list.append(top_10)
+            tfidf_value_list.append(tf_10)
+
+        # Cosine Similarity
+        make_word_d()
+        vector = []
+        cosine_web_list = []
+        cosine_value_list = []
+        index_name = []
+
+        for i in range(len(content_list)):
+            vector.append(make_vector(i))
+
+        for i in range(len(content_list)):
+            cosine = {}
+            for j in range(len(content_list)):
+                if i == j: continue
+                dotpro = dot(vector[i], vector[j])
+                cossimil = dotpro / (npl.norm(vector[i]) * npl.norm(vector[j]))
+                cosine[j] = cossimil
+            cosine_d = sorted(cosine.items(), reverse=True, key=lambda item: item[1])
+            top_3_set = list(cosine_d[:3])
+            top_3 = []
+            cs_3 = []
+            for t3 in top_3_set:
+                top_3.append(lines[t3[0]])
+                cs_3.append(round(t3[1],3))
+            cosine_web_list.append(top_3)
+            cosine_value_list.append(cs_3)
+
+        for j in range(len(lines)):
+            doc = {}
+            doc = {
+                'url': lines[j],
+                'word_num': num_list[j],
+                'time': time_list[j],
+                'tf-idf': tfidf_word_list[j],
+                'tfidf-value': tfidf_value_list[j],
+                'cosine-similarity': cosine_web_list[j],
+                'cosine_value': cosine_value_list[j]
+            }
+
+            name = 'text_url' + str(j)
+            res = es.index(index=name, doc_type='data', id=j, body=doc)
+            index_name.append(name)
+
+        return render_template('3-2.html', filename=FileName, url_list=lines, num_list=num_list, time_list=time_list,
                            multi=multi, name=index_name)
 
+    except:
+        return render_template('7.html')
 
 @app.route('/tf_idf', methods=['GET', 'POST'])
 def tf_idf():
@@ -384,4 +377,3 @@ def cosine():
         cosine_value.extend(result['_source']['cosine_value'])
         url = result['_source']['url']
     return render_template('4-2.html', cosine=cosine_list, cosine_value=cosine_value, url=url)
-
