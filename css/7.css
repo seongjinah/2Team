@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+
+.body{
+    background-color:#FFD962;
+    text-align: center;
+    font-family: 'Do Hyeon', sans-serif;
+}
+
+.outerbox{
+    margin-top:80px;
+}
+
+.outerbox .isSuccess{
+    font-size: 40px;
+    padding: 1px 20px;
+}
+
+.innerbox{
+    background-color: #FFF2C9;
+    margin: 20px auto;
+    width: 450px;
+    border-radius: 30px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    
+}
+
+.home{
+    float: right;
+}
+
+.body img{
+    width: 50px;
+    height:50px;
+}
+
+.body .home{
+    text-align: right;
+    margin-right: 100px;
+    padding: 20px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.tohome{
+    text-align: center;
+    margin-top: 7px;
+}
+
+.outerbox .errorimg{
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    height: 150px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+font-family: 'Black Han Sans', sans-serif;
+font-family: 'Do Hyeon', sans-serif;
+font-family: 'Merriweather', serif;
+font-family: 'Source Sans Pro', sans-serif;
