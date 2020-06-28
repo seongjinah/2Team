@@ -16,11 +16,7 @@
         </button>
         <div class='outerbox'>
             <div class="innerbox">
-                {% if k == 0 %}
                     <p>URL 분석 성공!</p>
-                {% else %}
-                    <p>URL 분석을 실패!</p>
-                {% endif %}
                 <p class="sentence">웹 페이지 '{{ address }}'는 {{ num }}개의 단어로 이루어져 있고, 분석하는데에 {{ time }}초가 걸렸습니다.</p>
             </div>
         </div>
