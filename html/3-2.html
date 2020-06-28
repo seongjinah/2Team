@@ -2,57 +2,60 @@
 <html>
 	<head>
 		<title>2Team_OpenSource_TeamProject_textfile</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/3-2.css')}}">
+        <link rel="stylesheet" href="3-2.css">
         
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	</head>
 	<body class='body'>
-        <button
-        onclick="location.href='http://localhost:5000/home'"
-        class="home">
-            <img src='https://image.flaticon.com/icons/svg/3039/3039766.svg'>
+        <button 
+            name="enter1" 
+            value="Enter" 
+            class="home">
+            <img src='./home.png'>
             <p class='tohome'>홈으로</p>
         </button>
         <div class="outerbox">
-            <div class="innerbox">
-                {% if k == 0 %}
+            {% if k == 0 %}
+                <div class="innerbox">
                     <p class="isSuccess">URL 분석 성공!</p>
-                {% else %}
-                    <p class="isSuccess">URL 분석 실패!</p>
-                {% endif %}
-                {% if multi == True %}
-                    <p class="overlap">중복 url을 제거하였습니다</p>
-                {% endif %}
-            </div>
-            <table>
-                <thead id="index">
-                    <tr>
-                        <th class="name">Web Name</th>
-                        <th class="count">Word Count</th>
-                        <th class="time">Time(sec)</th>
-                        <th class="Analysis">Analysis</th>
-                </thead>
-                <tbody>
-                    <!--{% for i in range(0,url_list|length)%}-->
-                    <tr>
-                        <td class="name">{{ url_list[i] }}</td>
-                        <td class="count">{{ num_list[i] }}</td>
-                        <td class="time">{{ time_list[i] }}</td>
-                        <td class="Analysis">
-                            <form method="POST" action="/tf_idf" class="analysis_btn">
-                                <input type="hidden" name="name" value={{ name[i] }}>
-                                <button type="submit" name="tfidf" value="tfidf" class="cl btn btn-dark ">TF-IDF</button>
-                            </form>
-                            <form method="POST" action="/cosine" class="analysis_btn">
-                                <input type="hidden" name="name" value={{ name[i] }}>
-                                <button type="submit" name="similarity" value="similarity" class="cl btn btn-dark ">Similarity</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>				
-                <!--{% endfor %}-->
+                    {% if multi == True %}
+                        <p class="overlap">중복 url을 제거하였습니다</p>
+                    {% endif %}
+                </div>
+                <table>
+                    <thead id="index">
+                        <tr>
+                            <th class="name">Web Name</th>
+                            <th class="count">Word Count</th>
+                            <th class="time">Time(sec)</th>
+                            <th class="Analysis">Analysis</th>
+                    </thead>
+                    <tbody>
+                        {% for i in range(0,url_list|length)%}
+                        <tr>
+                            <td class="name">{{ url_list[i] }}</td>
+                            <td class="count">{{ num_list[i] }}</td>
+                            <td class="time">{{ time_list[i] }}</td>
+                            <td class="Analysis">
+                                <form method="POST" action="/tf_idf" class="analysis_btn">
+                                    <input type="hidden" name="name" value={{ name[i] }}>
+                                    <button type="submit" name="tfidf" value="tfidf" class="cl btn btn-dark ">TF-IDF</button>
+                                </form>
+                                <form method="POST" action="/cosine" class="analysis_btn">
+                                    <input type="hidden" name="name" value={{ name[i] }}>
+                                    <button type="submit" name="similarity" value="similarity" class="cl btn btn-dark ">Similarity</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>				
+                    {% endfor %}
             </table>
+            {% else %}
+                <div class="innerbox">
+                    <p class="isSuccess">URL 분석 실패.. 옳은 URL을 입력해주세요!</p>
+                </div>
+            {% endif %}
         </div>
 	</body>
 </html>
